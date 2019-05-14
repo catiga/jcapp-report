@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 票务网售售卖报表</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/iCheck/custom.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/jsTree/style.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/datapicker/datepicker3.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/select2/select2.min.css|" rel="stylesheet">
+</head>
+<style>
+#datatable-buttons_paginate{
+display:none;
+}
+.dataTables_wrapper{
+padding-bottom: 0px;
+}
+#DataTables_Table_0_paginate{
+float:left;
+}
+#DataTables_Table_1_paginate{
+float:right;
+padding-top: 23px;
+}
+.dataTables_empty{
+display:none;
+}
+#datatable-buttons{
+display:none;
+}
+</style>
+<body>
+    <div id="wrapper">
+        <div th:replace="../common/nav"></div>
+        <div id="page-wrapper" class="gray-bg">
+            <div th:replace="../common/top"></div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-sm-4">
+                    <h2>票务网售售卖报表</h2>
+                    <ol class="breadcrumb">
+                        <li><a href="javascript:;">Home</a></li>
+                        <li class="active"><strong>票务网售售卖报表列表</strong></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight ecommerce" style="padding-bottom:0px;">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="row">
+                        <div class="col-sm-2" th:if="${parent_flag}">
+                            <div class="form-group">
+                                <label class="control-label" for="o_num">项目列表</label>
+                                <div class="input-group">
+                                   <select id="project_list" class="input-sm form-control" style="width:150px; height:36px;"> 
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label" for="o_num">开始日期</label>
+                                <div class="input-group">
+                                    <input   id="start_data"  class="input-sm form-control" th:value="${start_data}"> 
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label" for="o_num">结束日期</label>
+                                <div class="input-group">
+                                    <input   id="end_data"  class="input-sm form-control" th:value="${end_data}"> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <div class="form-group">
+                               <label class="control-label" for="o_num">&nbsp;  </label>
+                               <div class="input-group">
+                                   <span class="input-group-btn">
+                                       <button id="query_list" type="button" class="btn btn-sm btn-primary do_query"> 查询</button>
+                                   </span>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 goods_area">
+                    <div class="wrapper wrapper-content animated fadeInUp" style="padding-top:0px;">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table id = "datatable-buttons" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>订单编号</th>
+                                                <th>门店</th>
+                                                <th>演出厅</th>
+                                                <th>演出内容</th>
+                                                <th>演出日期</th>
+                                                <th>操作日期</th>
+                                                <th>状态</th>
+                                                <th>支付方式</th>
+                                                <th>是否退票</th>
+                                                <th>票数</th>
+                                                <th>座位详情</th>
+                                                <th>用券</th>
+                                                <th>参与活动</th>
+                                                <th>应收金额</th>
+                                                <th>实收金额</th>
+                                                <th>手续费</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="st:${page1.result}" >
+                                                <td class="check-mail"></td>
+                                                <td>[[${st.order_no }]]</td>
+                                                <td>[[${st.store_name}]]</td>
+                                                <td>[[${st.hall_name}]]</td>
+                                                <td>[[${st.film_name}]]</td>
+                                                <td>[[${st.plan_date}]]</td>
+                                                <td>[[${data.format(st.c_time, 'yyyy-MM-dd')}]]</td>
+                                                <td>
+                                                    <a th:if="${st.order_status}=='8200'">退款成功</a>
+                                                	<a th:if="${st.order_status}=='0000'">创建</a>
+                                                	<a th:if="${st.order_status}=='1013'">充值失败</a>
+                                                	<a th:if="${st.order_status}=='2000'">已出票</a>
+                                                	<a th:if="${st.order_status}=='3900'">已取票</a> 
+                                                </td>
+                                                <td>
+                                                <!-- 	<a th:if="${st.pay_type}=='201001'">微信支付被扫</a>
+                                                	<a th:if="${st.pay_type}=='100'">到店</a>
+                                                	<a th:if="${st.pay_type}=='200'">配送</a>
+                                                	<a th:if="${st.pay_type}=='202001'">支付宝被扫</a>
+                                                	<a th:if="${st.pay_type}=='202002'">支付宝主扫</a>
+                                                	<a th:if="${st.pay_type}=='201002'">微信支付主扫</a>
+                                                	<a th:if="${st.pay_type}=='301001'">现在支付POS</a>
+                                                	<a th:if="${st.pay_type}=='201101'">微信支付公众号</a>
+                                                	<a th:if="${st.pay_type}=='101001'">会员卡余额</a>
+                                                	<a th:if="${st.pay_type}=='001001'">现金支付</a>
+                                                	<a th:if="${st.pay_type}=='0000'">0000</a> -->
+                                                <div th:if="${st.pay_type!=null&&st.pay_type!=''}">
+                                                 	[[${list.get(st.pay_type)}]]
+                                                  </div> 
+                                                </td>
+                                                <td>[[${st.ticket_refund}]]</td>
+                                                <td>[[${st.ticket_sum}]]</td>
+                                              	<td>[[${st.seat_no}]]</td>
+                                                <td></td>
+                                                <td></td>
+												<td>[[${moneyUtil.get_yuan_from_cent(st.total_amount)}]]</td>
+                                                <td>[[${moneyUtil.get_yuan_from_cent(st.pay_amount)}]]</td>
+                                                <td>[[${moneyUtil.get_yuan_from_cent(st.handle_fee)}]]</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>订单编号</th>
+                                                <th>门店</th>
+                                                <th>演出厅</th>
+                                                <th>演出内容</th>
+                                                <th>演出日期</th>
+                                                <th>操作日期</th>
+                                                <th>状态</th>
+                                                <th>支付方式</th>
+                                                <th>是否退票</th>
+                                                <th>票数</th>
+                                                <th>座位详情</th>
+                                                <th>用券</th>
+                                                <th>参与活动</th>
+                                                <th>应收金额</th>
+                                                <th>实收金额</th>
+                                                <th>手续费</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="st:${page.result}" >
+                                                <td class="check-mail"></td>
+                                                <td>[[${st.order_no }]]</td>
+                                                <td>[[${st.store_name}]]</td>
+                                                <td>[[${st.hall_name}]]</td>
+                                                <td>[[${st.film_name}]]</td>
+                                                <td>[[${st.plan_date}]]</td>
+                                                <td>[[${data.format(st.c_time, 'yyyy-MM-dd')}]]</td>
+                                                <td>
+                                                	<a th:if="${st.order_status}=='8200'">退款成功</a>
+                                                	<a th:if="${st.order_status}=='0000'">创建</a>
+                                                	<a th:if="${st.order_status}=='1013'">出票失败</a>
+                                                	<a th:if="${st.order_status}=='2000'">已出票</a>
+                                                	<a th:if="${st.order_status}=='3900'">已取票</a> 
+                                                </td>
+                                                <td>
+                                                	<!-- <a th:if="${st.pay_type}=='201001'">微信支付被扫</a>
+                                                	<a th:if="${st.pay_type}=='100'">到店</a>
+                                                	<a th:if="${st.pay_type}=='200'">配送</a>
+                                                	<a th:if="${st.pay_type}=='202001'">支付宝被扫</a>
+                                                	<a th:if="${st.pay_type}=='202002'">支付宝主扫</a>
+                                                	<a th:if="${st.pay_type}=='201002'">微信支付主扫</a>
+                                                	<a th:if="${st.pay_type}=='301001'">现在支付POS</a>
+                                                	<a th:if="${st.pay_type}=='201101'">微信支付公众号</a>
+                                                	<a th:if="${st.pay_type}=='101001'">会员卡余额</a>
+                                                	<a th:if="${st.pay_type}=='001001'">现金支付</a>
+                                                	<a th:if="${st.pay_type}=='0000'">0000</a> -->
+                                                 <div th:if="${st.pay_type!=null&&st.pay_type!=''}">
+                                                 	[[${list.get(st.pay_type)}]]
+                                                  </div> 
+                                                </td>
+                                                <td>[[${st.ticket_refund}]]</td>
+                                                <td>[[${st.ticket_sum}]]</td>
+                                              	<td>[[${st.seat_no}]]</td>
+                                                <td></td>
+                                                <td></td>
+												<td>[[${moneyUtil.get_yuan_from_cent(st.total_amount)}]]</td>
+                                                <td>[[${moneyUtil.get_yuan_from_cent(st.pay_amount)}]]</td>
+                                                <td>[[${moneyUtil.get_yuan_from_cent(st.handle_fee)}]]</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div th:replace="../common/page"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="../common/foot"></div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+    <script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+    <script th:src="|${pub_bucket}/js/plugins/jsTree/jstree.min.js|"></script>  
+    <script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+    <script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+    <!-- iCheck -->
+    <script th:src="|${pub_bucket}/js/plugins/iCheck/icheck.min.js|"></script>
+    
+    <!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/datapicker/bootstrap-datepicker.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/select2/select2.full.min.js|"></script>
+    <!-- Datatables -->
+    <script th:src="|${pub_bucket}/datatables.net/js/jquery.dataTables.js|"></script>
+    <script th:src="|${pub_bucket}/datatables.net-bs/js/dataTables.bootstrap.min.js|"></script>
+    <script th:src="|${pub_bucket}/datatables.net-buttons/js/dataTables.buttons.min.js|"></script>
+    <script th:src="|${pub_bucket}/datatables.net-buttons-bs/js/buttons.bootstrap.min.js|"></script>
+    <script th:src="|${pub_bucket}/datatables.net-buttons/js/buttons.flash.min.js|"></script>
+	<script th:src="|${pub_bucket}/datatables.net-buttons/js/buttons.html5.min.js|"></script>
+	<script th:src="|${pub_bucket}/datatables.net-buttons/js/buttons.print.js|"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#loading-example-btn').click(function() {
+                btn = $(this);
+                simpleLoad(btn, true)
+                simpleLoad(btn, false)
+            });
+        });
+    </script>
+</body>
+
+<script type="text/javascript">
+$(function() {
+	 $('#start_data').datepicker({
+	        todayBtn : "linked",
+	        keyboardNavigation : false,
+	        forceParse : false,
+	        calendarWeeks : true,
+	        autoclose : true,
+	        format: "yyyy-mm-dd"
+	 });
+	 $('#end_data').datepicker({
+         todayBtn : "linked",
+         keyboardNavigation : false,
+         forceParse : false,
+         calendarWeeks : true,
+         autoclose : true,
+         format: "yyyy-mm-dd"
+      });
+
+	 var url = "[[${contextPath}]]/common/project_list/?" + Date.parse(new Date());
+		var pid = '[[${pid}]]' 
+		$.get(url, {}, function(data){
+		    if(data.available) {
+		    	var html = "";
+		    	if (pid == null || pid=="") {
+		    		html +=  "<option selected='selected' value=''>全部</option>";
+		    	} else {
+		    		html +=  "<option value=''>全部</option>";
+		    	}
+		        $.each(data.obj, function (key, value) {
+		        	if (value.id.toString() == pid.toString() ) {
+		        		html += "<option value="+ value.id+" selected='selected'>" + value.proj_name + "</option>";
+		        		return;
+		        	}
+		        	html += "<option value="+ value.id+">" + value.proj_name + "</option>"
+		        });
+		        $("#project_list").html(html);
+		    }else {
+		        var code = data.messages[0];
+		        layer.msg(code, {
+		            icon : 2
+		        });
+		    }
+		});
+		
+	 $("#query_list").on("click", function() {
+		 var pid = $("#project_list").val()==undefined ? "" : $("#project_list").val();
+		 var start_data = $("#start_data").val();
+		 var end_data = $("#end_data").val();
+		 window.location.href = "[[${contextPath}]]/ticketing_online/index?pid="+pid + "&start_data="+ start_data + "&end_data="+ end_data + "&" + Date.parse(new Date());
+	 })
+	
+	 $("#query_ps").change(function() {
+		 var pid = $("#project_list").val()==undefined ? "" : $("#project_list").val();
+		 var start_data = $("#start_data").val();
+		 var end_data = $("#end_data").val();
+		 var ps = $(this).val();
+		 window.location.href = "[[${contextPath}]]/ticketing_online/index?pid="+pid + "&start_data="+ start_data + "&end_data="+ end_data +"&ps="+ps+"&"+Date.parse(new Date());
+	 })
+	 $("#query_ps").val([[${ps}]]);
+});
+</script>
+<script>
+$(document).ready(function() {
+	var handleDataTableButtons = function() {
+		if ($("#datatable-buttons").length) {
+        	$("#datatable-buttons").DataTable({
+        		iDisplayLength: 10,
+        		autoWidth: true,
+        		dom: "Bfrtip",
+          		buttons: [
+            		{extend: "copy", className: "btn-sm"},
+            		{extend: "csv", className: "btn-sm"},            		
+          		]
+        	});
+      	}
+    };
+
+    TableManageButtons = function() {
+      	return {
+        	init: function() {
+          		handleDataTableButtons();
+			}
+		};
+    }();
+
+    $('#datatable').dataTable({
+    	"bPaginite":true,
+    	"iDisplayLength": 20,
+    	"autoWidth": true,
+    });
+    TableManageButtons.init();
+    $('#datatable-buttons_paginate');
+});
+</script>
+</html>

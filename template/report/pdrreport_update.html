@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${str}]] | 报表管理</title>
+<link th:href="@{{sp}/css/bootstrap.min.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/font-awesome/css/font-awesome.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/animate.css(sp=${pub_bucket})}" rel="stylesheet">
+<link th:href="@{{sp}/css/style.css(sp=${pub_bucket})}" rel="stylesheet">
+
+<link th:href="|${pub_bucket}/css/plugins/ladda/ladda-themeless.min.css|" rel="stylesheet">
+<link th:href="|${pub_bucket}/css/plugins/sweetalert/sweetalert.css|" rel="stylesheet">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div th:replace="../common/nav"></div>
+		<div id="page-wrapper" class="gray-bg">
+			<div th:replace="../common/top"></div>
+			<div class="row wrapper border-bottom white-bg page-heading">
+				<div class="col-sm-4">
+					<h2>报表管理</h2>
+					<ol class="breadcrumb">
+						<li><a href="javascript:;">Home</a></li>
+						<li class="active"><strong>报表管理</strong></li>
+					</ol>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="wrapper wrapper-content animated fadeInUp">
+						<div class="">
+							<div class="page-title">
+								<div class="title_left">
+									<h3>
+										[[${current_project.proj_name}]] <small>添加修改报表</small>
+									</h3>
+								</div>
+
+								<div class="title_right"></div>
+							</div>
+
+							<div class="clearfix"></div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="x_panel" style="padding: 0; margin: 0;">
+										<div class="x_content" style="padding: 0; margin: 0;">
+											<br>
+											<form class="form-horizontal form-label-left input_mask"
+												id="general_form" onsubmit="return false">
+												<div class="form-group">
+													<label class="control-label col-md-1 col-sm-1 col-xs-12">名称</label>
+													<div class="col-md-3 col-sm-3 col-xs-12">
+														<input type="text" class="form-control" name="name"
+															placeholder="请输入报表名称"
+															th:value='${edit_report.report_name}'>
+													</div>
+													<label class="control-label col-md-1 col-sm-1 col-xs-12">编号</label>
+													<div class="col-md-3 col-sm-3 col-xs-12">
+														<input type="text" class="form-control" name="no"
+															placeholder="请输入报表编号"
+															th:value='${edit_report.report_no}'>
+													</div>
+													<div class="col-md-4 col-sm-4 col-xs-12"
+														style="text-align: right;">
+														<button type="submit"
+															class="btn btn-success design_save_btn">保存</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-5">
+									<div class="x_panel">
+										<div class="x_title">
+											<h2>
+												SQL
+												<button type="button" class="btn btn-success btn-xs"
+													id="analysis_run_btn">
+													<i class="fa fa-play"></i>&nbsp解析
+												</button>
+											</h2>
+											<div class="clearfix"></div>
+										</div>
+										<div class="x_content">
+											<textarea class="form-control"
+												style="height: 500px; width: 100%; white-space: nowrap; overflow: scroll;"
+												id="sql_text">[[${edit_report.report_sql }]]</textarea>
+											<div class="clearfix"></div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-7">
+									<div class="x_panel">
+										<div class="x_title">
+											<h2>字段列表</h2>
+											<div class="clearfix"></div>
+										</div>
+										<div class="x_content">
+											<table class="table">
+												<thead>
+													<tr>
+														<th width="40%">表达式</th>
+														<th width="20%">别名</th>
+														<th width="40%">展示名</th>
+													</tr>
+												</thead>
+												<tbody id="select_item_list">
+													<tr th:each="fid:${edit_report.reportFieldObj}">
+														<td name="exp">[[${fid.expression }]]</td>
+														<td name="alias">[[${fid.alias }]]</td>
+														<td><input name="view_name" style="width: 100%;"
+															th:value="${fid.orgViewName }"></td>
+													</tr>
+												</tbody>
+											</table>
+											<div class="clearfix"></div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="x_panel">
+										<div class="x_title">
+											<h2>字段列表</h2>
+											<div class="clearfix"></div>
+										</div>
+										<div class="x_content">
+											<select class="form-control" id="candidate_item" multiple="multiple" style="width: 100%; height: 500px;">
+											</select>
+											<div class="clearfix"></div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="x_panel">
+										<div class="x_title">
+											<h2>维度</h2>
+											<div class="clearfix"></div>
+										</div>
+										<div class="x_content">
+											<div class="row">
+												<div class="col-md-2" style="">
+													<button type="button"
+														class="btn btn-success btn-xs right_btn">添加</button>
+													<button type="button"
+														class="btn btn-success btn-xs left_btn">删除</button>
+												</div>
+												<div class="col-md-10">
+													<select class="form-control" id="dimension_item"
+														multiple="multiple" style="width: 100%; height: 200px;">
+														<option th:each="fid:${edit_report.reportDimensionObj }" th:value="${fid.expression }">[[${fid.expression}]]</option>
+													</select>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+									</div>
+									<div class="x_panel">
+										<div class="x_title">
+											<h2>度量</h2>
+											<div class="clearfix"></div>
+										</div>
+										<div class="x_content">
+											<div class="row">
+												<div class="col-md-2">
+													<button type="button"
+														class="btn btn-success btn-xs right_btn">添加</button>
+													<button type="button"
+														class="btn btn-success btn-xs left_btn">删除</button>
+												</div>
+												<div class="col-md-10">
+													<select class="form-control" id="measure_item"
+														multiple="multiple" style="width: 100%; height: 200px;">
+														<option th:each="fid:${edit_report.reportMeasureObj }" th:value="${fid.expression }">[[${fid.expression}]]</option>
+													</select>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="x_panel">
+										<div class="x_title">
+											<h2>
+												自定义筛选条件列表
+												<button type="button" class="btn btn-success btn-xs"
+													id="add_condition_btn">
+													<i class="fa fa-plus"></i>&nbsp添加
+												</button>
+											</h2>
+											<ul class="nav navbar-right panel_toolbox">
+												<li><a href="javascript:"
+													onclick="open_cond_help(this);"><i
+														class="fa fa-question-circle"></i> 帮助</a></li>
+											</ul>
+											<div class="clearfix"></div>
+										</div>
+										<div class="x_content">
+											<table class="table">
+												<thead>
+													<tr>
+														<th width="10%">关键字</th>
+														<th width="10%">类型</th>
+														<th width="10%">条件名称</th>
+														<th width="25%">表达式</th>
+														<th width="10%">表达式类型</th>
+														<th width="10%">使用值</th>
+														<th width="10%">展示值</th>
+														<th width="5%">操作</th>
+													</tr>
+												</thead>
+												<tbody id="conditions_item">
+													<tr th:each="cond:${edit_report.conditions }">
+														<td><input class="form-control" name="keyword"
+															th:value="${cond.cond_keyword }" /></td>
+														<td>
+															<select class="form-control" name="type">
+																<option value="String" th:selected="${cond.cond_type == 'String' }">String</option>
+																<option value="Int"
+																	th:selected="${cond.cond_type == 'Int' }">Int
+																</option>
+																<option value="Double"
+																	th:selected="${cond.cond_type == 'Double' }">Double
+																</option>
+																<option value="Date"
+																	th:selected="${cond.cond_type == 'Date' }">Date
+																</option>
+																<option value="Datetime"
+																	th:selected="${cond.cond_type == 'Datetime' }">Datetime
+																</option>
+																<option value="Select"
+																	th:selected="${cond.cond_type == 'Select' }">Select
+																</option>
+																<option value="MultipleSelect"
+																	th:selected="${cond.cond_type == 'MultipleSelect' }">MultipleSelect
+																</option>
+																<option value="SSelect"
+																	th:selected="${cond.cond_type == 'SSelect' }">SSelect
+																</option>
+																<option value="SMultipleSelect"
+																	th:selected="${cond.cond_type == 'SMultipleSelect' }">SMultipleSelect
+																</option>
+															</select>
+														</td>
+														<td><input class="form-control" name="condname"
+															th:value="${cond.cond_name }" /></td>
+														<td><textarea
+																style="height: 150px; width: 100%; white-space: nowrap; overflow: scroll;"
+																name="sql">[[${cond.condExpressionObj.orgExpression }]]</textarea>
+														</td>
+														<td><select class="form-control" name="exp_type">
+																<option value="SQL"
+																	th:selected="${cond.cond_expression_type == 'SQL' }">SQL
+																</option>
+																<option value="JSON"
+																	th:selected="${cond.cond_expression_type == 'JSON' }">JSON
+																</option>
+														</select></td>
+														<td><select class="form-control" name="key">
+																<option selected="selected"
+																	th:value="${cond.cond_where_value }">[[${cond.cond_where_value}]]</option>
+														</select></td>
+														<td><select class="form-control" name="value">
+																<option selected="selected"
+																	th:value="${cond.cond_view_value }">[[${cond.cond_view_value}]]</option>
+														</select></td>
+														<td>
+															<button type="button" class="btn btn-success btn-xs"
+																onclick="analy_cond(this);">解析</button>
+															<button type="button" class="btn btn-danger btn-xs"
+																onclick="delete_cond(this);">删除</button>
+														</td>
+													</tr>
+												</tbody>
+												<tr style="display: none;" name="condition_template">
+													<td><input class="form-control" name="keyword" /></td>
+													<td><select class="form-control" name="type">
+															<option value="String">String</option>
+															<option value="Int">Int</option>
+															<option value="Double">Double</option>
+															<option value="Date">Date</option>
+															<option value="Datetime">Datetime</option>
+															<option value="Select">Select</option>
+															<option value="MultipleSelect">MultipleSelect</option>
+															<option value="SSelect">SSelect</option>
+															<option value="SMultipleSelect">SMultipleSelect</option>
+													</select></td>
+													<td><input class="form-control" name="condname"
+														value="" /></td>
+													<td><textarea
+															style="height: 150px; width: 100%; white-space: nowrap; overflow: scroll;"
+															name="sql"></textarea></td>
+													<td><select class="form-control" name="exp_type">
+															<option value="SQL">SQL</option>
+															<option value="JSON">JSON</option>
+													</select></td>
+													<td><select class="form-control" name="key">
+													</select></td>
+													<td><select class="form-control" name="value">
+													</select></td>
+													<td>
+														<button type="button" class="btn btn-success btn-xs"
+															onclick="analy_cond(this);">解析</button>
+														<button type="button" class="btn btn-danger btn-xs"
+															onclick="delete_cond(this);">删除</button>
+													</td>
+												</tr>
+											</table>
+											<div class="clearfix"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="../common/foot"></div>
+		</div>
+	</div>
+
+
+
+
+
+	<div id="cond_help_pop" style="display: none;">
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_content">
+						<ul class="list-unstyled timeline">
+							<li>
+								<div class="block">
+									<div class="tags">
+										<a href="" class="tag"> <span>关键字</span>
+										</a>
+									</div>
+									<div class="block_content">
+										<h2 class="title">
+											<a>关键字的定义和使用?</a>
+										</h2>
+										<div class="byline"></div>
+										<p class="excerpt">
+											新加条件的<b style="color: blue;">[关键字]</b>列定义关键字，同一报表关键字不可重复<br />
+											主sql窗体中以 "&#36;{用户定义关键字 }" 当做参数值使用(例: SELECT ... WHERE id =
+											"&#36;{keyword_id }")<br /> 需要注意 设计人员使用条件关键字时一律加双引号<br />
+										</p>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="block">
+									<div class="tags">
+										<a href="" class="tag"> <span>表达式</span>
+										</a>
+									</div>
+									<div class="block_content">
+										<h2 class="title">
+											<a>如何使用[表达式、表达式类型、使用值、展示值]?</a>
+										</h2>
+										<div class="byline"></div>
+										<p class="excerpt">
+											表达式支持SQL（异步后台获取数据）JSON（预定义数据）<br /> 填写<b style="color: blue;">[表达式]</b>后选择正确的<b
+												style="color: blue;">[表达式类型]</b>后点操作栏解析按钮进行解析<br />
+											解析正确后需要进行设置<b style="color: blue;">[使用值]</b>和<b
+												style="color: blue;">[展示值]</b><br />
+										</p>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="block">
+									<div class="tags">
+										<a href="" class="tag"> <span>关键字类型</span>
+										</a>
+									</div>
+									<div class="block_content">
+										<h2 class="title">
+											<a>如何选择关键字类型?</a>
+										</h2>
+										<div class="byline"></div>
+										<p class="excerpt">
+											常规类型String、Int、Double会以输入框方式在报表头部显示<br />
+											Date、DateTime会以时间选择器方式在报表头部显示<br />
+											Select、MultiSelect会以下拉选方式在报表头部显示<br /> 下拉选<b
+												style="color: #f37575;">需要设置</b><b style="color: blue;">[表达式、表达式类型、使用值、展示值]</b><br />
+											其他条件请<b style="color: #f37575;">忽略</b><b style="color: blue;">[表达式、表达式类型、使用值、展示值]</b><br />
+										</p>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="block">
+									<div class="tags">
+										<a href="" class="tag"> <span>预设关键字</span>
+										</a>
+									</div>
+									<div class="block_content">
+										<h2 class="title">
+											<a>无需定义即可使用的关键字?</a>
+										</h2>
+										<div class="byline"></div>
+										<p class="excerpt">
+											当前项目id： "&#36;{sys_kw_proj_id }"<br /> 当前登录人员id：
+											"&#36;{sys_kw_user_id }"<br /> 当前商户id： "&#36;{sys_kw_merch_id
+											}"<br />
+										</p>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="block">
+									<div class="tags">
+										<a href="" class="tag"> <span>其他</span>
+										</a>
+									</div>
+									<div class="block_content">
+										<h2 class="title">
+											<a>注意项?</a>
+										</h2>
+										<div class="byline"></div>
+										<p class="excerpt">
+											暂不支持条件二级联动<br /> 暂不支持条件where子句使用其他条件关键字<br /> 暂不支持having子句<br />
+										</p>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<input type="hidden" id="edit_report_id" th:value="${edit_report.id}"/>
+
+	<!-- Mainly scripts -->
+	<script th:src="@{{sp}/js/jquery-2.1.1.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/bootstrap.min.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/metisMenu/jquery.metisMenu.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/slimscroll/jquery.slimscroll.min.js(sp=${pub_bucket})}"></script>
+
+	<!-- Custom and plugin javascript -->
+	<script th:src="@{{sp}/js/inspinia.js(sp=${pub_bucket})}"></script>
+	<script th:src="@{{sp}/js/plugins/pace/pace.min.js(sp=${pub_bucket})}"></script>
+	
+	<script th:src="@{{sp}/third/layer3/layer.js(sp=${pub_bucket})}" type="text/javascript"></script>
+	
+	<!-- Ladda -->
+    <script th:src="|${pub_bucket}/js/plugins/ladda/spin.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/ladda/ladda.jquery.min.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/jeditable/jquery.jeditable.js|"></script>
+    <script th:src="|${pub_bucket}/js/plugins/dataTables/datatables.min.js|"></script>
+    
+    <script th:src="|${pub_bucket}/js/plugins/sweetalert/sweetalert.min.js|"></script>
+
+	<script>
+		$(document).ready(function() {
+
+			$('#loading-example-btn').click(function() {
+				btn = $(this);
+				simpleLoad(btn, true)
+
+				simpleLoad(btn, false)
+			});
+		});
+
+		function simpleLoad(btn, state) {
+			if (state) {
+				btn.children().addClass('fa-spin');
+				btn.contents().last().replaceWith(" Loading");
+			} else {
+				setTimeout(function() {
+					btn.children().removeClass('fa-spin');
+					btn.contents().last().replaceWith(" Refresh");
+				}, 2000);
+			}
+		}
+	</script>
+</body>
+
+<script type="text/javascript">
+
+var storage = {
+	items : {}
+	,key : "value"
+}
+
+$("#analysis_run_btn").click(function(){
+	var sql = $("#sql_text").val();
+	var postdata = {
+		"sql" : sql,
+		"ts" : new Date().getTime()
+	};
+	var load_pop = layer.load();
+	$.ajax({
+		url :"[[${contextPath}]]" + "/report/aj/analysis_sql",
+		type : "POST",
+		data : postdata,
+		success : function(msg){
+			layer.close(load_pop);
+			$("#select_item_list").html("");
+			$("#candidate_item").html("");
+			if(msg.available){
+				if(msg.data){
+					storage.items = msg.data;
+					//select_item_list
+					for(var i=0,ic=msg.data.length;i<ic;i++){
+						var item = msg.data[i];
+						var row = `
+							<tr>
+		                        <td name="exp" width="40%" >`+item.expression+`</td>
+		                        <td name="alias" width="20%">`+(item.alias ? item.alias : "")+`</td>
+		                        <td width="40%"><input name="view_name" style="width:100%;" /></td>
+		                      </tr>
+						`;
+						$("#select_item_list").append(row);
+						var option = `
+							<option value="`+(item.expression.replace(/'/g,"-").replace(/"/g,"-"))+`">`+item.expression+`</option>
+						`;
+						$("#candidate_item").append(option);
+					}
+				}
+			}else{
+				layer.alert("SQL解析失败"+msg.messages[0]);
+			}
+		}
+	});
+});
+
+$(".right_btn").click(function(){
+	var _src = $("#candidate_item");
+	var _target = $(this).parent().parent().find("select");
+	
+	_src.find("option").each(function(){
+		if($(this).is(":checked")){
+			console.log(_target.find("option[value='"+$(this).val()+"']")[0])
+			//if(!_target.find("option[value='"+$(this).val()+"']")[0]){
+				_target.append($(this));
+			//}
+		}
+	});
+});
+$(".left_btn").click(function(){
+	var _src = $("#candidate_item");
+	var _target = $(this).parent().parent().find("select");
+	_target.find("option").each(function(){
+		if($(this).is(":checked")){
+			_src.append($(this));
+		}
+	});
+});
+
+$("#add_condition_btn").click(function(){
+	var new_tr = $("tr[name=condition_template]")[0].outerHTML;
+	var _new_tr = $(new_tr);
+	_new_tr.removeAttr("name").css("display","");
+	
+	/* for(var i=0,ic=storage.items.length;i<ic;i++){
+		var item = storage.items[i];
+		var option = '<option value="'+(item.expression.replace(/'/g,"-").replace(/"/g,"-"))+'">'+item.expression+'</option>';
+		_new_tr.find("select[name=item]").append(option);
+	} */
+	
+	$("#conditions_item").append(_new_tr);
+});
+
+var delete_cond = function(btn){
+	$(btn).parents("tr").remove();
+}
+
+var analy_cond = function(btn){
+	var _src = $(btn).parents("tr");
+	var _textarea = _src.find("textarea[name=sql]");
+	var sql = _textarea.val();
+	var exp_type = _src.find("select[name=exp_type]").val();
+	
+	_src.find("select[name=key]").html("");
+	_src.find("select[name=value]").html("");
+	
+	if("SQL" == exp_type){
+		var postdata = {
+			"sql" : sql,
+			"ts" : new Date().getTime()
+		};
+		var load_pop = layer.load();
+		$.ajax({
+			url : "[[${contextPath}]]" + "/report/aj/analysis_sql",
+			type : "POST",
+			data : postdata,
+			success : function(msg){
+				layer.close(load_pop);
+				if(msg.available){
+					if(msg.data){
+						_textarea.data("items",msg.data);
+						//select_item_list
+						for(var i=0,ic=msg.data.length;i<ic;i++){
+							var item = msg.data[i];
+							var option = '<option value="'+(item.expression.replace(/'/g,"-").replace(/"/g,"-"))+'">'+item.expression+'</option>';
+							
+							_src.find("select[name=key]").append(option);
+							_src.find("select[name=value]").append(option);
+						}
+					}
+				}else{
+					layer.alert("SQL解析失败"+msg.messages[0]);
+				}
+			}
+		});
+	}else if("JSON" == exp_type){
+		try{
+			var jsondata = JSON.parse(sql);
+			if(jsondata instanceof Array && jsondata.length > 0){
+				var obj = jsondata[0];
+				for(var key in obj){
+					var option = '<option value="'+(key.replace(/'/g,"-").replace(/"/g,"-"))+'">'+key+'</option>';
+					
+					_src.find("select[name=key]").append(option);
+					_src.find("select[name=value]").append(option);
+				}
+			}else{
+				layer.alert("JSON必须为长度大于0的数组");
+			}
+		}catch(e){
+			layer.alert("JSON解析失败"+e);
+		}
+	}
+}
+
+var open_cond_help = function(){
+	layer.open({
+		area : ['800px','600px'],
+		type : 1,
+		title : "如何使用自定义筛选条件",
+		content : $("#cond_help_pop")
+	});
+}
+
+$(".design_save_btn").click(function(){
+	//解析条件
+	var conds = [];
+	$("#conditions_item tr").each(function(){
+		var keyword = $(this).find("input[name=keyword]").val();
+		var condname = $(this).find("input[name=condname]").val();
+		var type = $(this).find("select[name=type]").val();
+		var exp = $(this).find("textarea[name=sql]").val();
+		var exp_type = $(this).find("select[name=exp_type]").val();
+		var key = $(this).find("select[name=key]").val();
+		var value = $(this).find("select[name=value]").val();
+		
+		var cond = {
+            "keyword":keyword,
+            "condname":condname,
+            "type":type,
+            "expression":exp,
+            "expression_type":exp_type,
+            "key":key,
+            "value":value
+        };
+		
+		conds.push(cond);
+	});
+	//解析字段
+	var fields = [];
+	$("#select_item_list tr").each(function(){
+		var exp = $(this).find("td[name=exp]").html();
+		var alias = $(this).find("td[name=alias]").html();
+		var view_name = $(this).find("input[name=view_name]").val();
+		
+		var field = {
+            "expression":exp,
+            "alias":alias,
+            "view_name":view_name
+        };
+		
+		fields.push(field);
+	});
+	//维度
+	var dimensions = [];
+	$("#dimension_item option").each(function(){
+		dimensions.push($(this).html());
+	});
+	//度量
+	var measures = [];
+	$("#measure_item option").each(function(){
+		measures.push($(this).html());
+	});
+	
+	var sql = $("#sql_text").val();
+	
+	var report_name = $("#general_form").find("input[name=name]").val();
+	var report_no = $("#general_form").find("input[name=no]").val();
+	
+	var edit_id;
+	try{
+		//edit_id = "${edit_report.id }";
+		edit_id = $("#edit_report_id").val();
+	}catch(e){}
+ 
+	var postdata = {
+	    "id":edit_id,
+	    "report_name":report_name,
+	    "report_no":report_no,
+		"sql":sql,
+	    "dimensions":dimensions,
+	    "measures":measures,
+	    "conds":conds,
+	    "fields":fields
+	}
+	
+	var load_pop = layer.load();
+	$.ajax({
+		url : "[[${contextPath}]]" + "/report/aj/save",
+		type : "POST",
+		data : {reqbody:encodeURIComponent(JSON.stringify(postdata))},
+		//contentType: "application/json;charset=utf-8",
+		success : function(msg){
+			layer.close(load_pop);
+			if(msg.available){
+				layer.alert("操作成功",function(){
+					history.go(-1);
+				});
+			}else{
+				layer.alert("操作失败"+msg.messages[0]);
+			}
+		}
+	});
+});
+
+/* $("#sql_text").val(`SELECT
+		  a.store_id AS ccc,
+		  order_status,
+		  SUM(total_amount),
+		  SUM(pay_amount),
+		  CONCAT(' FROM ','123123'),
+		  b.id
+		FROM 
+		data_tc_ss_order_info a,
+		data_tc_ss_order_seat b,
+		sys_project_info c
+		WHERE b.order_id = a.id AND a.proj_id = c.id
+`);
+$("textarea[name=sql]").html(`
+		SELECT
+		  id,
+		  store_name
+		FROM piaodaren_pe1_dbmain.data_store_info
+		WHERE proj_id = '${sys_kw_proj_id }'
+`); */
+</script>
+
+</html>
