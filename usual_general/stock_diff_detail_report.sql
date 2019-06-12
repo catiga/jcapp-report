@@ -1,3 +1,6 @@
+/**
+ * 库存变动明细报表
+ */
 select 
 opbatchsn as 批次编号,
 goods_no as 商品内码,

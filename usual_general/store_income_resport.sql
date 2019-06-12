@@ -1,3 +1,6 @@
+/**
+ * 门店支付方式营收报表
+ */
 SELECT
 	si.store_name AS 门店,
 	DATE_FORMAT(tor.a_time  , '%Y-%m-%d') AS 交易时间,

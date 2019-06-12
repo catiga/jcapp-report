@@ -1,3 +1,6 @@
+/**
+ * 按照商品库存汇总表
+ */
 select 
 store_name as 门店,
 wh_name as 仓库,

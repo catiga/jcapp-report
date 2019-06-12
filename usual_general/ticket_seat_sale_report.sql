@@ -1,3 +1,6 @@
+/**
+ * 票务座位销售报表
+ */
 select 
 o.store_name as 影城  , 
 o.hall_name as 影厅  , 
