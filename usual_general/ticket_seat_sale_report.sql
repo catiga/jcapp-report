@@ -12,7 +12,7 @@ concat(s.seat_sr, '排', s.seat_sc, '座') as 座位,
 
 CASE WHEN o.pay_type = '001001' THEN '现金' WHEN o.pay_type = '101001' THEN '会员' WHEN o.pay_type = '201001' THEN '微信支付被扫'
  WHEN o.pay_type = '201002' THEN '微信支付主扫' WHEN o.pay_type = '201101' THEN '微信公众号支付' WHEN o.pay_type = '201102' THEN '微信小程序支付'
- WHEN o.pay_type = '202001' THEN '支付宝被扫' WHEN o.pay_type = '202002' THEN '祝福包主扫' WHEN o.pay_type = '301001' THEN '现在POS' 
+ WHEN o.pay_type = '202001' THEN '支付宝被扫' WHEN o.pay_type = '202002' THEN '支付宝主扫' WHEN o.pay_type = '301001' THEN '现在POS' 
  WHEN o.pay_type = '90009000weixin' THEN '某自定义支付方式'
  ELSE o.pay_type END AS 其他,
  
@@ -28,8 +28,8 @@ join `hp_trade`.trade_info tra on tro.t_id=tra.id
 join `hp_trade`.cashier_doer_log log on tra.log_id=log.id 
 
 where o.order_status in ('1000'  , '2000'  , '3000')
-AND o.a_time >= '"${start_time}" 00:00:00'
-AND o.a_time <= '"${end_time}" 23:59:59'
-AND s.tclass_id="${tclass_id}"
-AND log.uid="${uid}"
+AND o.a_time >= '"${start_time}"'
+AND o.a_time <= '"${end_time}"'
+AND s.tclass_id='"${tclass_id}"'
+AND log.uid='"${uid}"'
 

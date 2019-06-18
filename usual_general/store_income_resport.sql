@@ -82,8 +82,8 @@ WHERE
 	'2000',
 	'3000'
 )
-AND tor.a_time >= '"${start_time}" 00:00:00'
-AND tor.a_time <= '"${end_time}" 23:59:59'
+AND tor.a_time >= '"${start_time}"'
+AND tor.a_time <= '"${end_time}"'
 GROUP BY
 	tor.storeid,
 	tor.a_time
