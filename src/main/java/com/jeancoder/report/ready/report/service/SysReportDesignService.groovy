@@ -141,7 +141,7 @@ public class SysReportDesignService {
 		
 		String groupstr = geneGroupStr(design.getReportDimensionObj(),postdata.getDimensions());
 		String wherestr = geneWhereStr(design.getReportWhereObj(),postdata.getWheres(),syswherevalue);
-		
+		LOGGER.info('where json=' + JackSonBeanMapper.toJson(postdata));
 		LOGGER.info('wherestr=' + wherestr);
 		String orderstr = geneSortStr(design.getReportFieldObj(),postdata.getSortBy());
 		
