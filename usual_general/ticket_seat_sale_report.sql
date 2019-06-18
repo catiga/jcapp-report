@@ -19,7 +19,9 @@ CASE WHEN o.pay_type = '001001' THEN '现金' WHEN o.pay_type = '101001' THEN '�
 SUM(CAST(s.sale_fee/100 AS DECIMAL(10,2))) as 票价,
 o.a_time as 时间  , 
 
-log.uname as  销售员
+CASE WHEN o.order_status = '8200' THEN '退票' ELSE '售票' END AS 类型,
+
+log.uname
 from 
 `hp_ticketingsys`.data_tc_ss_sale_order_seat s 
 left join `hp_ticketingsys`.data_tc_ss_sale_order_info o on s.order_id = o.id
@@ -27,7 +29,7 @@ join `hp_trade`.trade_order tro on s.order_id=tro.order_id
 join `hp_trade`.trade_info tra on tro.t_id=tra.id 
 join `hp_trade`.cashier_doer_log log on tra.log_id=log.id 
 
-where o.order_status in ('1000'  , '2000'  , '3000')
+where o.order_status in ('1000'  , '2000'  , '3000', '8200')
 AND o.a_time >= '"${start_time}"'
 AND o.a_time <= '"${end_time}"'
 AND s.tclass_id='"${tclass_id}"'
