@@ -71,7 +71,7 @@ if(uri_without_code.endsWith("/"))
 	uri_without_code = uri_without_code[0..-2];
 request.setAttribute("__now_uri_", uri_without_code);
 
-def ret_str = JC.internal.call('project', '/incall/mod/mods', [pid:GlobalHolder.proj.id,user_id:GlobalHolder.authToken.user.id,app_code:'report', accept:URLEncoder.encode(JackSonBeanMapper.listToJson(result), 'UTF-8')]);
+def ret_str = JC.internal.call('project', '/incall/mod/mods', [pid:GlobalHolder.proj.id,user_id:GlobalHolder.authToken.user.id,app_code:'report']);
 
 Logger.info(ret_str);
 
