@@ -46,6 +46,7 @@ appFunChild.addAll([mod_g1_1, mod_g1_2]);
 
 //获取当前项目可用系统报表
 def mod_g2 = FuncUtil.build(2, '报表列表', null, 'cashier', 'fa-money');
+appFun.add(mod_g_2)
 List<SysReportDesign> all_reports = JcTemplate.INSTANCE().find(SysReportDesign, 'select * from SysReportDesign where flag!=? and proj_id=?', -1, GlobalHolder.proj.id);
 if(all_reports) {
 	def i = 200;
@@ -55,9 +56,6 @@ if(all_reports) {
 		result.add(mod_g2_tmp);
 	}
 }
-
-Logger.info('GlobalHolder.proj=' + GlobalHolder.proj.id);
-Logger.info('GlobalHolder.getAuthToken=' + GlobalHolder.authToken.user.id);
 
 JCRequest request = JC.request.get();
 request.setAttribute("appMain", mod_g_main);
@@ -71,9 +69,8 @@ if(uri_without_code.endsWith("/"))
 	uri_without_code = uri_without_code[0..-2];
 request.setAttribute("__now_uri_", uri_without_code);
 
-def ret_str = JC.internal.call('project', '/incall/mod/mods', [pid:GlobalHolder.proj.id,user_id:GlobalHolder.authToken.user.id,app_code:'report']);
-
-Logger.info(ret_str);
+//def ret_str = JC.internal.call('project', '/incall/mod/mods', [pid:GlobalHolder.proj.id,user_id:GlobalHolder.authToken.user.id,app_code:'report', accept:URLEncoder.encode(JackSonBeanMapper.listToJson(result), 'UTF-8')]);
+//Logger.info(ret_str);
 
 List<AppFunction> functions = NativeUtil.connectAsArray(AppFunction.class, 'project', '/incall/mod/mods', [pid:GlobalHolder.proj.id,user_id:GlobalHolder.authToken.user.id,app_code:'report', accept:URLEncoder.encode(JackSonBeanMapper.listToJson(result), 'UTF-8')]);
 
