@@ -2,7 +2,9 @@ package com.jeancoder.report.interceptor.mod
 
 import com.jeancoder.annotation.urlmapped
 import com.jeancoder.app.sdk.JC
+import com.jeancoder.app.sdk.source.LoggerSource
 import com.jeancoder.core.http.JCRequest
+import com.jeancoder.core.log.JCLogger
 import com.jeancoder.core.util.JackSonBeanMapper
 import com.jeancoder.jdbc.JcTemplate
 import com.jeancoder.report.ready.dto.sys.AppFunction
@@ -13,6 +15,8 @@ import com.jeancoder.report.ready.util.FuncUtil
 import com.jeancoder.report.ready.util.NativeUtil
 
 @urlmapped("/")
+
+JCLogger Logger = LoggerSource.getLogger();
 
 //def mod_g = FuncUtil.build(1, '报表管理', null, '', 'fa-shopping-cart');
 //def mod_g1 = FuncUtil.build(101, '会员充值报表', 1, 'index', 'fa-shopping-cart',2);
@@ -52,7 +56,8 @@ if(all_reports) {
 	}
 }
 
-
+Logger.info('GlobalHolder.proj=' + JackSonBeanMapper.toJson(GlobalHolder.proj));
+Logger.info('GlobalHolder.getAuthToken=' + JackSonBeanMapper.toJson(GlobalHolder.getAuthToken()));
 
 JCRequest request = JC.request.get();
 request.setAttribute("appMain", mod_g_main);
