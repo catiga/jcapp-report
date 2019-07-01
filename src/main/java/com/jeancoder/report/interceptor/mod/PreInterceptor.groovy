@@ -52,7 +52,7 @@ if(all_reports) {
 	def i = 200;
 	for(x in all_reports) {
 		i++;
-		def mod_g2_tmp = FuncUtil.build(i, x.report_name, 2, 'report/report/list/detail/?report_no=' + x.report_no, '', 2);
+		def mod_g2_tmp = FuncUtil.build(i, x.report_name, 2, 'report/list/detail/?report_no=' + x.report_no, '', 2);
 		result.add(mod_g2_tmp);
 	}
 }
