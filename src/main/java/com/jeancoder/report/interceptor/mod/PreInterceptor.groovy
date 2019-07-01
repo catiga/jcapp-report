@@ -71,6 +71,10 @@ if(uri_without_code.endsWith("/"))
 	uri_without_code = uri_without_code[0..-2];
 request.setAttribute("__now_uri_", uri_without_code);
 
+def ret_str = JC.internal.call('project', '/incall/mod/mods', [pid:GlobalHolder.proj.id,user_id:GlobalHolder.authToken.user.id,app_code:'report', accept:URLEncoder.encode(JackSonBeanMapper.listToJson(result), 'UTF-8')]);
+
+Logger.info(ret_str);
+
 List<AppFunction> functions = NativeUtil.connectAsArray(AppFunction.class, 'project', '/incall/mod/mods', [pid:GlobalHolder.proj.id,user_id:GlobalHolder.authToken.user.id,app_code:'report', accept:URLEncoder.encode(JackSonBeanMapper.listToJson(result), 'UTF-8')]);
 
 Map<AppFunction, List<AppFunction>> my_funcs = my_funcs(functions);
