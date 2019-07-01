@@ -56,8 +56,8 @@ if(all_reports) {
 	}
 }
 
-Logger.info('GlobalHolder.proj=' + JackSonBeanMapper.toJson(GlobalHolder.proj));
-Logger.info('GlobalHolder.getAuthToken=' + JackSonBeanMapper.toJson(GlobalHolder.getAuthToken()));
+Logger.info('GlobalHolder.proj=' + GlobalHolder.proj.id);
+Logger.info('GlobalHolder.getAuthToken=' + GlobalHolder.authToken.user.id);
 
 JCRequest request = JC.request.get();
 request.setAttribute("appMain", mod_g_main);
