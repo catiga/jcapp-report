@@ -32,7 +32,7 @@ def mod_g1_1 = FuncUtil.build(101, '报表工具', 1, 'report/mgr', '', 2);
 def mod_g1_2 = FuncUtil.build(102, '报表预览', 1, 'report/list/list', '', 2);
 
 
-def result = [mod_g1_1,mod_g1_2];
+def result = [mod_g1, mod_g1_1,mod_g1_2];
 AppFunction mod_g_main = new AppFunction();
 mod_g_main.func_name = '报表管理';
 mod_g1_1.func_info = '快速制作业务报表工具';
@@ -46,7 +46,7 @@ appFunChild.addAll([mod_g1_1, mod_g1_2]);
 
 //获取当前项目可用系统报表
 def mod_g2 = FuncUtil.build(2, '报表列表', null, 'cashier', 'fa-money');
-appFun.add(mod_g_2)
+result.add(mod_g2)
 List<SysReportDesign> all_reports = JcTemplate.INSTANCE().find(SysReportDesign, 'select * from SysReportDesign where flag!=? and proj_id=?', -1, GlobalHolder.proj.id);
 if(all_reports) {
 	def i = 200;
