@@ -48,7 +48,7 @@ appFunChild.addAll([mod_g1_1, mod_g1_2]);
 //获取当前项目可用系统报表
 def mod_g2 = FuncUtil.build(2, '报表列表', null, 'cashier', 'fa-money');
 result.add(mod_g2)
-List<SysReportDesign> all_reports = JcTemplate.INSTANCE().find(SysReportDesign, 'select * from SysReportDesign where flag!=? and proj_id=?', -1, GlobalHolder.proj.id);
+List<SysReportDesign> all_reports = JcTemplate.INSTANCE().find(SysReportDesign, 'select * from SysReportDesign where flag!=? and ( proj_id=? or proj_id=? )', -1, GlobalHolder.proj.id, 0);
 if(all_reports) {
 	def i = 200;
 	for(x in all_reports) {
