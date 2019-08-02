@@ -28,6 +28,7 @@ JC.interceptor.add("mod/PreInterceptor", null);
 //
 //def result = [mod_g,mod_g1,mod_g2,mod_g3,mod_g4,mod_g5,mod_g6,mod_g7,mod_2,mod_2_1,mod_2_2];
 
+/*
 def mod_g1 = FuncUtil.build(1, '报表管理', null, 'cashier', 'fa-money');
 def mod_g1_1 = FuncUtil.build(101, '报表工具', 1, 'report/mgr', '', 2);
 def mod_g1_2 = FuncUtil.build(102, '报表预览', 1, 'report/list/list', '', 2);
@@ -59,4 +60,6 @@ if(all_reports) {
 }
 
 NativeUtil.connect( 'project', '/incall/mod/mods', [app_code:'report', accept:URLEncoder.encode(JackSonBeanMapper.listToJson(result), 'UTF-8')]);
- 
+*/
+
+
