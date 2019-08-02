@@ -43,8 +43,8 @@ if(GlobalHolder.proj.root==1) {
 	hql += ' and flag!=?';
 	params.add(-1);
 } else {
-	hql += ' and proj_id = ? and flag <> ?';
-	params.add(GlobalHolder.proj.id); params.add(-1);
+	hql += ' and ( proj_id = ? or proj_id =  ? ) and flag <> ?';
+	params.add(GlobalHolder.proj.id); params.add(0); params.add(-1);
 }
 page = JcTemplate.INSTANCE().find(SysReportDesign, page, hql, params.toArray());
 
