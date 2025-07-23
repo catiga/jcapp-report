@@ -1,67 +1,37 @@
-package com.jeancoder.report.ready.dto.sys;
+package com.jeancoder.report.ready.dto.sys
 
-import java.sql.Timestamp;
+import java.sql.Timestamp
 
 class SysProjectInfo {
 
-	private BigInteger id;
-	
-	private String proj_name;
-	
-	private String proj_status;
-	
-	private Timestamp a_time;
-	
-	private Timestamp c_time;
-	
-	private Integer flag = 0;
-	
-	private String config;
-	
-	private String domain;
-	
-	private String proj_key;
-	
-	private BigInteger merch_id;
-	
-	private String custom_phone;
-	
-	private String template;
-	
-	private String info;
-	
-	private String brief;
-	
-	private String sms_phone;
-	
-	private Integer root;
-	
-	private String logo;
-	
-	private BigInteger proj_biz_clas;
-	
-	private String proj_type;
-	
-	private Integer indemc;
-	
-	private String default_index;
-	
-	private String sms_tpl;
-	
-	private Integer i_p_unique;
-	
-	private Integer is_p_plat;
-	
-	private String admin_tpl;
-	
-	private String fskin;
-	
-	private Integer depmode;
-	
-	private String depmac;
-	
-	private BigInteger user_id;
-	
-	private String user_name;
-	
+	BigInteger id
+	String proj_name
+	String proj_status
+	Timestamp a_time
+	Timestamp c_time
+	Integer flag = 0
+	String config
+	String domain
+	String proj_key
+	BigInteger merch_id
+	String custom_phone
+	String template
+	String info
+	String brief
+	String sms_phone
+	Integer root
+	String logo
+	BigInteger proj_biz_clas
+	String proj_type
+	Integer indemc
+	String default_index
+	String sms_tpl
+	Integer i_p_unique
+	Integer is_p_plat
+	String admin_tpl
+	String fskin
+	Integer depmode
+	String depmac
+	BigInteger user_id
+	String user_name
 }
