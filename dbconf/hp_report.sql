@@ -41,7 +41,7 @@ CREATE TABLE `sys_report_condition` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `design` (`design_id`) USING BTREE,
   KEY `kw` (`design_id`,`cond_keyword`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=dynamic;
 
 
 
@@ -68,7 +68,7 @@ CREATE TABLE `sys_report_design` (
   `c_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `report_no` (`report_no`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=dynamic;
 
 
 
