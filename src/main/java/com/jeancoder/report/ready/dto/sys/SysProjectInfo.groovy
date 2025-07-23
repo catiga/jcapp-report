@@ -6,7 +6,7 @@ import com.jeancoder.jdbc.bean.JCBean
 import com.jeancoder.jdbc.bean.JCID
 
 @JCBean(tbname = "sys_project_info")
-public class SysProjectInfo {
+class SysProjectInfo {
 	
 	@JCID
 	private BigInteger id;
