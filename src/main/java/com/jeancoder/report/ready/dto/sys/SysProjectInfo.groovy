@@ -2,13 +2,8 @@ package com.jeancoder.report.ready.dto.sys;
 
 import java.sql.Timestamp;
 
-import com.jeancoder.jdbc.bean.JCBean
-import com.jeancoder.jdbc.bean.JCID
-
-@JCBean(tbname = "sys_project_info")
 class SysProjectInfo {
-	
-	@JCID
+
 	private BigInteger id;
 	
 	private String proj_name;
